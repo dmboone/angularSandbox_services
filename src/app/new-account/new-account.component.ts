@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
+import { AccountsService } from '../account/accounts.service';
 import { LoggingService } from '../logging.service';
 
 @Component({
@@ -6,17 +7,15 @@ import { LoggingService } from '../logging.service';
   templateUrl: './new-account.component.html',
   styleUrls: ['./new-account.component.css'],
   providers: [LoggingService] // must include your service in list of providers to use
+  // in this case we don't include AccountService because we want to reference the parent version inside app.component rather than create another instance of it here
 })
 export class NewAccountComponent {
-  @Output() accountAdded = new EventEmitter<{name: string, status: string}>();
 
-  constructor(private loggingService: LoggingService){} // creates an instance of our logging service
+  constructor(private loggingService: LoggingService,
+              private accountService: AccountsService){} // instantiating our services
 
   onCreateAccount(accountName: string, accountStatus: string) {
-    this.accountAdded.emit({
-      name: accountName,
-      status: accountStatus
-    });
+    this.accountService.addAccount(accountName, accountStatus);
     this.loggingService.logStatusChange(accountStatus); // now we can use the service
   }
 }
