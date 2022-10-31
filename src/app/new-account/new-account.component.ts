@@ -12,7 +12,11 @@ import { LoggingService } from '../logging.service';
 export class NewAccountComponent {
 
   constructor(private loggingService: LoggingService,
-              private accountService: AccountsService){} // instantiating our services
+              private accountService: AccountsService){ // instantiating our services
+    this.accountService.statusUpdated.subscribe( // this will run when the status updated event occurs from the accounts service
+      (status: string) => alert('New Status: ' + status)
+    );
+  } 
 
   onCreateAccount(accountName: string, accountStatus: string) {
     this.accountService.addAccount(accountName, accountStatus);
